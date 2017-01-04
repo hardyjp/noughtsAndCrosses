@@ -1,0 +1,17 @@
+table oandx.results schema
+
++---------+------------------+------+-----+---------+----------------+
+| Field   | Type             | Null | Key | Default | Extra          |
++---------+------------------+------+-----+---------+----------------+
+| gamenum | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| square1 | char(1)          | YES  |     | NULL    |                |
+| square2 | char(1)          | YES  |     | NULL    |                |
+| square3 | char(1)          | YES  |     | NULL    |                |
+| square4 | char(1)          | YES  |     | NULL    |                |
+| square5 | char(1)          | YES  |     | NULL    |                |
+| square6 | char(1)          | YES  |     | NULL    |                |
+| square7 | char(1)          | YES  |     | NULL    |                |
+| square8 | char(1)          | YES  |     | NULL    |                |
+| square9 | char(1)          | YES  |     | NULL    |                |
+| result  | char(1)          | YES  |     | NULL    |                |
++---------+------------------+------+-----+---------+----------------+
