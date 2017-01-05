@@ -9,7 +9,7 @@ class NoughtsCrosses
 	private $un = 'jph';
 	private $pw = 'consett';
 
-	function get_aggregate_results()
+	public function get_aggregate_results()
     {
 		$conn = new mysqli($this->hn, $this->un, $this->pw, $this->db);
 		if ($conn->connect_error) die($conn->connect_error);
@@ -34,12 +34,13 @@ class NoughtsCrosses
 		$conn->close();
 	}
 
-	function calculate_winners()
+	public function calculate_winners()
     {
 		$conn = new mysqli($this->hn, $this->un, $this->pw, $this->db);
 		if ($conn->connect_error) die($conn->connect_error);
 		$x = 0;
 		while (FALSE !== ($line = fgets(STDIN))) {
+			// Be sure to ignore any blank lines between games
 			if($line[0] != "\n" && $line[0] != "\r"){
 				$row[$x] = array($line[0],$line[1],$line[2]);
 				if($x < 2){
@@ -56,26 +57,26 @@ class NoughtsCrosses
 					$square9 = (string)$row[2][2];
 					// eight possible winning lines, otherwise a draw
 					if($square1 == $square2 && $square1 == $square3){
-						$result = $square1;
+						$gameResult = $square1;
 					} elseif($square1 == $square4 && $square1 == $square7){
-						$result = $square1;
+						$gameResult = $square1;
 					} elseif($square1 == $square5 && $square1 == $square9){
-						$result = $square1;
+						$gameResult = $square1;
 					} elseif($square2 == $square5 && $square2 == $square8){
-						$result = $square2;
+						$gameResult = $square2;
 					} elseif($square3 == $square5 && $square3 == $square7){
-						$result = $square3;
+						$gameResult = $square3;
 					} elseif($square3 == $square6 && $square3 == $square9){
-						$result = $square3;
+						$gameResult = $square3;
 					} elseif($square4 == $square5 && $square4 == $square6){
-						$result = $square4;
+						$gameResult = $square4;
 					} elseif($square7 == $square8 && $square7 == $square9){
-						$result = $square7;
+						$gameResult = $square7;
 					} else {
-						$result = "D";
+						$gameResult = "D";
 					}
 					
-					switch($result):
+					switch($gameResult):
 						case "X":
 							++$this->xWins;
 							break;
@@ -86,17 +87,20 @@ class NoughtsCrosses
 							++$this->draws;
 					endswitch;
 					
+					// record the game and the result in the database
 					$insert = "INSERT INTO results(square1, square2, square3, square4, square5, square6, square7, square8, square9, result)" . 
-					"VALUES('$square1','$square2','$square3','$square4','$square5','$square6','$square7','$square8','$square9','$result')";
+					"VALUES('$square1','$square2','$square3','$square4','$square5','$square6','$square7','$square8','$square9','$gameResult')";
 					$result = $conn->query($insert);
 					if (!$result) die($conn->error);
 					$x = 0;
 				}
 			}
 		}
+		$conn->close();
+
 	}
 
-	function get_results()
+	public function get_results()
     {
 		echo "X wins: " . $this->xWins . " \n";
 		echo "O wins: " . $this->oWins . " \n";
